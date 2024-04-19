@@ -70,7 +70,7 @@ const columns = [
     {
         title: 'cookies',
         dataIndex: 'cookies',
-        width: '40%'
+        width: '70%'
     },
     {
         title: '操作',
