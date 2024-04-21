@@ -6,7 +6,7 @@
 <style lang="stylus">
 body
     position relative
-    width: 1024px
+    width: 420px
     height: 450px
 
 #app

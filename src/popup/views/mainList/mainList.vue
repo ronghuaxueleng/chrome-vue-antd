@@ -28,25 +28,9 @@
                                 @click="$router.push({ path: '/edit', query: { row: JSON.stringify(record) } })" />
                         </a-tooltip>
                         <a-divider type="vertical" />
-                        <a-popconfirm title="Are you sure delete?" ok-text="Yes" cancel-text="No"
-                            @confirm="delCookie(index)">
-                            <a-tooltip>
-                                <template #title>删除</template>
-                                <DeleteOutlined />
-                            </a-tooltip>
-                        </a-popconfirm>
-                        <a-divider type="vertical" />
-                        <a-popconfirm title="Are you sure inject?" ok-text="Yes" cancel-text="No"
-                            @confirm="injectCookie(record)">
-                            <a-tooltip>
-                                <template #title>注入</template>
-                                <AimOutlined :class="{ 'highlighted': record.name === usedCookie.name }" />
-                            </a-tooltip>
-                        </a-popconfirm>
-                        <a-divider type="vertical" />
                         <a-tooltip>
-                            <template #title>拷贝窗口当前所有cookie</template>
-                            <RedoOutlined @click="copyAllCookie(record.name)" />
+                          <template #title>注入当前cookie</template>
+                          <RedoOutlined @click="injectCookie(record)" />
                         </a-tooltip>
                     </div>
                 </template>
@@ -66,11 +50,6 @@ const columns = [
     {
         title: '名称',
         dataIndex: 'name',
-    },
-    {
-        title: 'cookies',
-        dataIndex: 'cookies',
-        width: '70%'
     },
     {
         title: '操作',
