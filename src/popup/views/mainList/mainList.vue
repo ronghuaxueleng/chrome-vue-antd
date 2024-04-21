@@ -1,11 +1,7 @@
 <template>
     <div class="main">
         <a-space wrap>
-            <a-button type="primary" @click="$router.push('/add')">添加</a-button>
             <a-button type="primary" @click="syncData">同步数据</a-button>
-            <a-popconfirm title="确定清除当前窗口所有Cookie?" ok-text="Yes" cancel-text="No" @confirm="removeCookie">
-                <a-button danger block>清除所有cookie</a-button>
-            </a-popconfirm>
         </a-space>
         <a-table :columns="columns" :data-source="data" :scroll="{ x: '100%' }" size='small'
             style="height: 100%;margin-top: 8px;" bordered>

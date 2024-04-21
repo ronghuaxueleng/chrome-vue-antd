@@ -2,7 +2,6 @@
     <div class="M-nav">
         <a-tabs v-model="path" type="card" @tabClick="onTabChange">
             <a-tab-pane key="/mainList" tab="主页"></a-tab-pane>
-            <!-- <a-tab-pane key="/mainList" tab="在线CooKie"></a-tab-pane> -->
         </a-tabs>
     </div>
 </template>
