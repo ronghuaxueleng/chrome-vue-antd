@@ -1,7 +1,7 @@
 {
   "name": "cookie注入",
-  "version": "2.0.0",
-  "description": "注入cookie,适用于测试网站",
+  "version": "1.0.0",
+  "description": "自用的一个特定网站cookie注入工具",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
