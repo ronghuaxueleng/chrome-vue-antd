@@ -105,9 +105,6 @@ const checkAndReload = (currentCount, totalCount, currentTab) => {
 
 const injectData = (data, currentTab) => {
   // 注入 cookie
-  var currentUrl = new URL(currentTab.url);
-  var currentDomain = currentUrl.hostname;
-  debugger;
   const newData = data.map((item) => ({
     ...item,
     url: currentTab.url,
