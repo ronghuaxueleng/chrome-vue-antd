@@ -117,14 +117,10 @@ const injectData = (data, currentTab) => {
   newData.forEach((item) => {
     if (item.type === 1 || item.type === undefined) {
       // 注入 cookie
-      let param = {
-        name: item.name,
-        value: item.value,
-        url: currentTab.url,
-        // domain: currentDomain,
-        path: "/",
-      };
-      chrome.cookies.set(param, (result) => {
+      delete item['hostOnly']
+      delete item['session']
+      item['url'] = currentTab.url
+      chrome.cookies.set(item, (result) => {
         console.log("Cookie is set:", result);
         count++;
         checkAndReload(count, newData.length, currentTab);
