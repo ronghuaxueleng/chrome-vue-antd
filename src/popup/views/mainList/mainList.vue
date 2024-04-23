@@ -1,18 +1,18 @@
 <template>
   <div class="main">
-    <a-space>
-      <a-form layout="inline" name="syncData" :model="searchFrom" @finish="syncData">
-        <a-form-item label="searchValue" name="searchValue">
-          <a-input v-model:value="searchFrom.searchValue"/>
-        </a-form-item>
-        <a-form-item style="text-align: center;">
-          <a-button type="primary" html-type="submit">同步数据</a-button>
-        </a-form-item>
-        <a-form-item>
+      <a-space-compact>
           <a-button type="link" href="https://www.liblib.art/message" target="_blank">跳转到lib</a-button>
-        </a-form-item>
-      </a-form>
-    </a-space>
+      </a-space-compact>
+      <a-space-compact>
+          <a-form  layout="inline" name="syncData" :model="searchFrom" @finish="syncData">
+              <a-form-item label="searchValue" name="searchValue">
+                  <a-input v-model:value="searchFrom.searchValue"/>
+              </a-form-item>
+              <a-form-item style="text-align: center;">
+                  <a-button type="primary" html-type="submit">同步数据</a-button>
+              </a-form-item>
+          </a-form>
+      </a-space-compact>
     <a-table :columns="columns" :data-source="data" :scroll="{ x: '100%' }" size='small'
              style="height: 100%;margin-top: 8px;" bordered>
       <template #bodyCell="{ column, record, index }">
