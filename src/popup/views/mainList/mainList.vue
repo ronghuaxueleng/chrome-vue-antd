@@ -36,7 +36,7 @@
 </template>
 <script setup>
 import { apiReqs } from '@/api'
-import { DeleteOutlined, AimOutlined, FormOutlined, RedoOutlined } from '@ant-design/icons-vue';
+import { FormOutlined, RedoOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import { ref, inject, onMounted } from 'vue';
 const methods = inject('globalMethods');
@@ -92,33 +92,6 @@ const syncData = () => {
         message.error('接口获取数据失败');
       },
     })
-}
-
-const copyAllCookie = (name) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        if (!tabs) {
-            message.error('获取当前窗口域名失败');
-        }
-        chrome.runtime.sendMessage({ action: 'copyAllCookie', tabs, name }, (response) => {
-            console.log('收到来自 background.js 的响应:', response);
-        });
-    });
-}
-
-const delCookie = (index) => {
-    data.value.splice(index, 1);
-    methods.setStorage({ 'cookie': data.value });
-}
-
-const removeCookie = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        if (!tabs) {
-            message.error('获取当前窗口域名失败');
-        }
-        chrome.runtime.sendMessage({ action: 'delCookie', tabs: tabs }, (response) => {
-            console.log('收到来自 background.js 的响应:', response);
-        });
-    });
 }
 
 const injectCookie = (data) => {

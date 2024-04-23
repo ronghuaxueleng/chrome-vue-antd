@@ -5,10 +5,16 @@ import { CRX_OUTDIR } from './globalConfig'
 export default defineConfig({
     build: {
         outDir: CRX_OUTDIR,
+        rollupOptions: {
+            input: {
+                option: path.resolve(__dirname, 'option.html'),
+                popup: path.resolve(__dirname, 'popup.html'),
+            }
+        }
     },
     server: {
         port: 3000,
-        open: '/',
+        open: '/option.html',
         proxy: {
             '/api': {
                 target: 'http://127.0.0.1/',

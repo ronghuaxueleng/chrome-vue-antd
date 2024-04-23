@@ -35,7 +35,7 @@
     "declarativeNetRequestFeedback"
   ],
   "action": {
-    "default_popup": "index.html",
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "/images/icon16.png",
       "32": "/images/icon32.png",
@@ -45,5 +45,9 @@
       "256": "/images/icon256.png"
     },
     "default_title": "cookie注入"
+  },
+  "options_ui": {
+    "page": "option.html",
+    "open_in_tab": true
   }
 }
