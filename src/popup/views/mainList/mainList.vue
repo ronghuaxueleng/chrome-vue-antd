@@ -4,7 +4,7 @@
             <a-button type="primary" @click="syncData">同步数据</a-button>
         </a-space>
         <a-table :columns="columns" :data-source="data" :scroll="{ x: '100%' }" size='small'
-            style="height: 100%;margin-top: 8px;" bordered>
+                 style="height: 100%;margin-top: 8px;" bordered>
             <template #bodyCell="{ column, record, index }">
                 <template v-if="column.dataIndex === 'name'">
                     {{ record.name }}
@@ -21,12 +21,12 @@
                         <a-tooltip>
                             <template #title>编辑</template>
                             <FormOutlined
-                                @click="$router.push({ path: '/edit', query: { row: JSON.stringify(record) } })" />
+                                @click="$router.push({ path: '/edit', query: { row: JSON.stringify(record) } })"/>
                         </a-tooltip>
-                        <a-divider type="vertical" />
+                        <a-divider type="vertical"/>
                         <a-tooltip>
-                          <template #title>注入当前cookie</template>
-                          <RedoOutlined @click="injectCookie(record)" />
+                            <template #title>注入当前cookie</template>
+                            <RedoOutlined @click="injectCookie(record)"/>
                         </a-tooltip>
                     </div>
                 </template>
@@ -35,10 +35,11 @@
     </div>
 </template>
 <script setup>
-import { apiReqs } from '@/api'
-import { FormOutlined, RedoOutlined } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
-import { ref, inject, onMounted } from 'vue';
+import {apiReqs} from '@/api'
+import {FormOutlined, RedoOutlined} from '@ant-design/icons-vue';
+import {message} from 'ant-design-vue';
+import {ref, inject, onMounted} from 'vue';
+
 const methods = inject('globalMethods');
 const data = ref([]);
 const usedCookie = ref({});
@@ -55,43 +56,46 @@ const columns = [
 ];
 
 const syncData = () => {
-    apiReqs.getToken({
-      success: (res) => {
-        // 同步数据
-        apiReqs.getData({
-          headers: {
-            "authorization": res['data']['token_type'] + ' ' + res['data']['token']
-          },
-          // 如果上传文件，则设置formData为true，这里暂时不用。
-          success: (res) => {
-            let datas = res.data
-            if (Array.isArray(datas) && datas.length > 0) {
-              const dataList = datas
-                  .map((item) => ({
-                    name: item.remarks,
-                    cookiesArr: JSON.parse(item.value),
-                  }));
+    methods.getStorage(('clientInfo'), (clientdata) => {
+        apiReqs.getToken({
+            url: "open/auth/token?client_id=" + clientdata.client_id+"&client_secret=" + clientdata.client_secret,
+            success: (res) => {
+                // 同步数据
+                apiReqs.getData({
+                    headers: {
+                        "authorization": res['data']['token_type'] + ' ' + res['data']['token']
+                    },
+                    // 如果上传文件，则设置formData为true，这里暂时不用。
+                    success: (res) => {
+                        let datas = res.data
+                        if (Array.isArray(datas) && datas.length > 0) {
+                            const dataList = datas
+                                .map((item) => ({
+                                    name: item.remarks,
+                                    cookiesArr: JSON.parse(item.value),
+                                }));
 
-              if (dataList.length === 0) {
-                message.success('接口暂无有效数据');
-                return;
-              }
-              data.value = dataList
-            } else {
-              message.success('接口暂无数据');
-            }
-          },
-          fail: (res) => {
-            console.log('接口获取数据失败', res)
-            message.error('接口获取数据失败');
-          },
+                            if (dataList.length === 0) {
+                                message.success('接口暂无有效数据');
+                                return;
+                            }
+                            data.value = dataList
+                        } else {
+                            message.success('接口暂无数据');
+                        }
+                    },
+                    fail: (res) => {
+                        console.log('接口获取数据失败', res)
+                        message.error('接口获取数据失败');
+                    },
+                })
+            },
+            fail: (res) => {
+                console.log('接口获取数据失败', res)
+                message.error('接口获取数据失败');
+            },
         })
-      },
-      fail: (res) => {
-        console.log('接口获取数据失败', res)
-        message.error('接口获取数据失败');
-      },
-    })
+    });
 }
 
 const injectCookie = (data) => {
@@ -99,32 +103,20 @@ const injectCookie = (data) => {
     if (!data.cookiesArr) {
         console.log('cookie为空')
     }
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         if (!tabs) {
             console.log('获取当前窗口域名失败')
         }
-        chrome.runtime.sendMessage({ action: 'injectCookie', data: data.cookiesArr, tabs: tabs }, (response) => {
+        chrome.runtime.sendMessage({action: 'injectCookie', data: data.cookiesArr, tabs: tabs}, (response) => {
             console.log('收到来自 background.js 的响应:', response);
-            methods.setStorage({ 'usedCookie': data });
+            methods.setStorage({'usedCookie': data});
             usedCookie.value = data
         });
     });
 }
 
-const getUsedCookie = () => {
-    // 获取已注入cookie
-    methods.getStorage(('usedCookie'), async (data) => {
-        console.log("usedCookie list is", data)
-        if (data) {
-            usedCookie.value = data
-        }
-    });
-}
-
 onMounted(() => {
     syncData()
-    // 已注入cookie
-    getUsedCookie()
 })
 </script>
 <style scoped>

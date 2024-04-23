@@ -14,7 +14,7 @@ export default defineConfig({
     },
     server: {
         port: 3000,
-        open: '/option.html',
+        open: '/popup.html',
         proxy: {
             '/api': {
                 target: 'http://127.0.0.1/',

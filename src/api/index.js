@@ -23,24 +23,22 @@ export const API_CODE = {
 
 // API请求异常报错内容
 export const API_FAILED = "网络连接异常，请稍后再试";
-
 // API请求汇总
 export const apiReqs = {
   getToken: (config) => {
-    config.url = API_DOMAIN + "open/auth/token?client_id=87-Qvk4Hk-nb&client_secret=n-fxseqaQRE6F3rClKo0F1rl";
     config.method = "get";
     apiFetch(config);
   },
   // 获取数据
   getData: (config) => {
-    config.url = API_DOMAIN + "open/envs?searchValue=liblib_cookie";
+    config.url = "open/envs?searchValue=liblib_cookie";
     config.method = "get";
     apiFetch(config);
   },
   // 委托background提交数据
   submitByBackground: (config) => {
     config.background = true;
-    config.url = API_DOMAIN + "submit/";
+    config.url = "submit/";
     config.method = "post";
     apiFetch(config);
   },
@@ -103,7 +101,7 @@ export function apiRequest(config) {
     axiosConfig.body = data;
   }
 
-  fetch(config.url, axiosConfig)
+  fetch(API_DOMAIN + config.url, axiosConfig)
     .then((res) => res.json())
     .then((result) => {
       config.done && config.done();

@@ -14,30 +14,20 @@
   </div>
 </template>
 <script setup>
-import { useRouter } from 'vue-router'
-import { reactive, inject } from 'vue';
-import { message } from 'ant-design-vue';
+import {reactive, inject, onMounted} from 'vue';
 const methods = inject('globalMethods');
 const addFrom = reactive({
   client_secret: '',
   client_id: ''
 });
 const onFinish = async values => {
-  // 提交
-  methods.getStorage(('cookie'), async (data) => {
-    let newdata = [];
-    if (Array.isArray(data) && data.length > 0) {
-      const existingName = data.findIndex(item => item.name === values.name);
-      if (existingName !== -1) {
-        message.error('name已存在')
-        return
-      }
-      newdata = [values,...data];
-    } else {
-      newdata = [values];
-    }
-    // 存储数据
-    await methods.setStorage({ 'cookie': newdata });
-  });
+  // 存储数据
+  await methods.setStorage({ 'clientInfo': values });
 };
+onMounted(() => {
+    methods.getStorage(('clientInfo'), (data) => {
+        addFrom.client_id = data.client_id
+        addFrom.client_secret = data.client_secret
+    });
+})
 </script>
