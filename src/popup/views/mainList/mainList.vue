@@ -1,7 +1,14 @@
 <template>
     <div class="main">
-        <a-space wrap>
-            <a-button type="primary" @click="syncData">同步数据</a-button>
+        <a-space>
+            <a-form layout="inline" name="syncData" :model="searchFrom" @finish="syncData">
+                <a-form-item label="searchValue" name="searchValue">
+                    <a-input v-model:value="searchFrom.searchValue" />
+                </a-form-item>
+                <a-form-item style="text-align: center;">
+                    <a-button type="primary" html-type="submit">同步数据</a-button>
+                </a-form-item>
+            </a-form>
         </a-space>
         <a-table :columns="columns" :data-source="data" :scroll="{ x: '100%' }" size='small'
                  style="height: 100%;margin-top: 8px;" bordered>
@@ -38,7 +45,7 @@
 import {apiReqs} from '@/api'
 import {FormOutlined, RedoOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
-import {ref, inject, onMounted} from 'vue';
+import {ref, inject, onMounted, reactive} from 'vue';
 
 const methods = inject('globalMethods');
 const data = ref([]);
@@ -54,14 +61,22 @@ const columns = [
         fixed: 'right'
     },
 ];
+const searchFrom = reactive({
+    searchValue: 'liblib_cookie',
+});
 
 const syncData = () => {
-    methods.getStorage(('clientInfo'), (clientdata) => {
+    // methods.getStorage(('clientInfo'), (data) => {
+        let clientdata = {
+            client_secret: 'n-fxseqaQRE6F3rClKo0F1rl',
+            client_id: '87-Qvk4Hk-nb'
+        }
         apiReqs.getToken({
             url: "open/auth/token?client_id=" + clientdata.client_id+"&client_secret=" + clientdata.client_secret,
             success: (res) => {
                 // 同步数据
                 apiReqs.getData({
+                    url: "open/envs?searchValue=" + searchFrom.searchValue,
                     headers: {
                         "authorization": res['data']['token_type'] + ' ' + res['data']['token']
                     },
@@ -95,7 +110,7 @@ const syncData = () => {
                 message.error('接口获取数据失败');
             },
         })
-    });
+    // });
 }
 
 const injectCookie = (data) => {

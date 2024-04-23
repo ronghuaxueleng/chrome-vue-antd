@@ -31,7 +31,6 @@ export const apiReqs = {
   },
   // 获取数据
   getData: (config) => {
-    config.url = "open/envs?searchValue=liblib_cookie";
     config.method = "get";
     apiFetch(config);
   },
