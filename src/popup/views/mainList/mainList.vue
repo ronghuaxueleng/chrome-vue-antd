@@ -66,7 +66,7 @@ const searchFrom = reactive({
 });
 
 const syncData = () => {
-    methods.getStorage(('clientInfo'), (data) => {
+    methods.getStorage(('clientInfo'), (clientdata) => {
         apiReqs.getToken({
             url: "open/auth/token?client_id=" + clientdata.client_id+"&client_secret=" + clientdata.client_secret,
             success: (res) => {
