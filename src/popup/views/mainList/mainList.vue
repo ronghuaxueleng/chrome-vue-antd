@@ -66,11 +66,7 @@ const searchFrom = reactive({
 });
 
 const syncData = () => {
-    // methods.getStorage(('clientInfo'), (data) => {
-        let clientdata = {
-            client_secret: 'n-fxseqaQRE6F3rClKo0F1rl',
-            client_id: '87-Qvk4Hk-nb'
-        }
+    methods.getStorage(('clientInfo'), (data) => {
         apiReqs.getToken({
             url: "open/auth/token?client_id=" + clientdata.client_id+"&client_secret=" + clientdata.client_secret,
             success: (res) => {
@@ -110,7 +106,7 @@ const syncData = () => {
                 message.error('接口获取数据失败');
             },
         })
-    // });
+    });
 }
 
 const injectCookie = (data) => {
