@@ -27,5 +27,18 @@ export default defineConfig({
             '@': path.resolve(__dirname, 'src'),
         },
     },
-    plugins: [vue()],
+    plugins: [vue(
+        {
+            template: {
+                compilerOptions: {
+                    isCustomElement: (tag) => [
+                        'el-config-provider',
+                        'el-input',
+                        'el-button',
+                        'el-dialog'
+                    ].includes(tag),
+                }
+            }
+        }
+    )],
 })
