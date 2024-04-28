@@ -77,12 +77,12 @@ const options = ref([]);
 
 const syncData = () => {
     options.value = []
-    const url = "https://gist.githubusercontent.com/ronghuaxueleng/4423ea3d530b9e758c7dd47a456e9c3f/raw/2a5cb6e218a10f2734d41dfd4a476bec009c56f6/cookie_names.json"
+    const url = "https://gist.githubusercontent.com/ronghuaxueleng/4423ea3d530b9e758c7dd47a456e9c3f/raw/3463a589618728812fb220d1085406914b74c821/cookie_names.json"
     fetch(url).then((res) => res.json())
         .then((result) => {
             for (let x of result) {
                 options.value.push({
-                    value: x, label: x
+                    value: x.cookieName, label: x.siteName
                 })
             }
             methods.getStorage(('clientInfo'), (clientdata) => {
