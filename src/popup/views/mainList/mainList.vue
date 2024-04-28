@@ -6,7 +6,12 @@
       <a-space-compact>
           <a-form  layout="inline" name="syncData" :model="searchFrom" @finish="syncData">
               <a-form-item label="searchValue" name="searchValue">
-                  <a-input v-model:value="searchFrom.searchValue"/>
+                  <a-select
+                      v-model:value="searchFrom.searchValue"
+                      :size="size"
+                      style="width: 200px"
+                      :options="options"
+                  ></a-select>
               </a-form-item>
               <a-form-item style="text-align: center;">
                   <a-button type="primary" html-type="submit">同步数据</a-button>
@@ -67,49 +72,61 @@ const columns = [
 const searchFrom = reactive({
   searchValue: 'liblib_cookie',
 });
+const size = ref('default');
+const options = ref([]);
 
 const syncData = () => {
-  methods.getStorage(('clientInfo'), (clientdata) => {
-    apiReqs.getToken({
-      url: "open/auth/token?client_id=" + clientdata.client_id + "&client_secret=" + clientdata.client_secret,
-      success: (res) => {
-        // 同步数据
-        apiReqs.getData({
-          url: "open/envs?searchValue=" + searchFrom.searchValue,
-          headers: {
-            "authorization": res['data']['token_type'] + ' ' + res['data']['token']
-          },
-          // 如果上传文件，则设置formData为true，这里暂时不用。
-          success: (res) => {
-            let datas = res.data
-            if (Array.isArray(datas) && datas.length > 0) {
-              const dataList = datas
-                  .map((item) => ({
-                    name: item.remarks,
-                    cookiesArr: JSON.parse(item.value),
-                  }));
-
-              if (dataList.length === 0) {
-                message.success('接口暂无有效数据');
-                return;
-              }
-              data.value = dataList
-            } else {
-              message.success('接口暂无数据');
+    options.value = []
+    const url = "https://gist.githubusercontent.com/ronghuaxueleng/4423ea3d530b9e758c7dd47a456e9c3f/raw/2a5cb6e218a10f2734d41dfd4a476bec009c56f6/cookie_names.json"
+    fetch(url).then((res) => res.json())
+        .then((result) => {
+            for (let x of result) {
+                options.value.push({
+                    value: x, label: x
+                })
             }
-          },
-          fail: (res) => {
-            console.log('接口获取数据失败', res)
-            message.error('接口获取数据失败');
-          },
+            methods.getStorage(('clientInfo'), (clientdata) => {
+                apiReqs.getToken({
+                    url: "open/auth/token?client_id=" + clientdata.client_id + "&client_secret=" + clientdata.client_secret,
+                    success: (res) => {
+                        // 同步数据
+                        apiReqs.getData({
+                            url: "open/envs?searchValue=" + searchFrom.searchValue,
+                            headers: {
+                                "authorization": res['data']['token_type'] + ' ' + res['data']['token']
+                            },
+                            // 如果上传文件，则设置formData为true，这里暂时不用。
+                            success: (res) => {
+                                let datas = res.data
+                                if (Array.isArray(datas) && datas.length > 0) {
+                                    const dataList = datas
+                                        .map((item) => ({
+                                            name: item.remarks,
+                                            cookiesArr: JSON.parse(item.value),
+                                        }));
+
+                                    if (dataList.length === 0) {
+                                        message.success('接口暂无有效数据');
+                                        return;
+                                    }
+                                    data.value = dataList
+                                } else {
+                                    message.success('接口暂无数据');
+                                }
+                            },
+                            fail: (res) => {
+                                console.log('接口获取数据失败', res)
+                                message.error('接口获取数据失败');
+                            },
+                        })
+                    },
+                    fail: (res) => {
+                        console.log('接口获取数据失败', res)
+                        message.error('接口获取数据失败');
+                    },
+                })
+            });
         })
-      },
-      fail: (res) => {
-        console.log('接口获取数据失败', res)
-        message.error('接口获取数据失败');
-      },
-    })
-  });
 }
 
 const injectCookie = (data) => {
