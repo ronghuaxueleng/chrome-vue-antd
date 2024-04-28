@@ -1,7 +1,7 @@
 <template>
   <div class="main">
       <a-space-compact>
-          <a-button type="link" href="https://www.liblib.art/message" target="_blank">跳转到lib</a-button>
+          <a-button type="link" :href="option.url" target="_blank">跳转到{{option.siteName}}</a-button>
       </a-space-compact>
       <a-space-compact>
           <a-form  layout="inline" name="syncData" :model="searchFrom" @finish="syncData">
@@ -53,7 +53,7 @@
 import {apiReqs} from '@/api'
 import {FormOutlined, RedoOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
-import {ref, inject, onMounted, reactive} from 'vue';
+import {ref, inject, onMounted, reactive, watch} from 'vue';
 
 const methods = inject('globalMethods');
 const data = ref([]);
@@ -74,6 +74,8 @@ const searchFrom = reactive({
 });
 const size = ref('default');
 const options = ref([]);
+const optionMap = ref({});
+const option = ref({});
 
 const syncData = () => {
     options.value = []
@@ -84,7 +86,9 @@ const syncData = () => {
                 options.value.push({
                     value: x.cookieName, label: x.siteName
                 })
+                optionMap.value[x.cookieName] = x
             }
+            option.value = optionMap.value[searchFrom.searchValue]
             methods.getStorage(('clientInfo'), (clientdata) => {
                 apiReqs.getToken({
                     url: "open/auth/token?client_id=" + clientdata.client_id + "&client_secret=" + clientdata.client_secret,
@@ -149,6 +153,12 @@ const injectCookie = (data) => {
 onMounted(() => {
   syncData()
 })
+watch(
+    () =>searchFrom.searchValue,
+    val => {
+        option.value = optionMap.value[val]
+    }
+)
 </script>
 <style scoped>
 .highlighted {
