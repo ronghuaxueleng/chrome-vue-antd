@@ -8,6 +8,7 @@
                       :size="size"
                       style="width: 200px"
                       :options="options"
+                      @change="handleChange"
                   ></a-select>
               </a-form-item>
               <a-form-item style="text-align: center;">
@@ -153,12 +154,10 @@ const injectCookie = (data) => {
 onMounted(() => {
   syncData()
 })
-watch(
-    () =>searchFrom.searchValue,
-    val => {
-        option.value = optionMap.value[val]
-    }
-)
+const handleChange = (value) => {
+    option.value = optionMap.value[value]
+    syncData()
+};
 </script>
 <style scoped>
 .highlighted {
