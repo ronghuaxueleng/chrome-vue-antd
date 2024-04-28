@@ -2,7 +2,7 @@
   <div class="main">
       <a-space-compact>
           <a-form  layout="inline" name="syncData" :model="searchFrom" @finish="syncData">
-              <a-form-item label="searchValue" name="searchValue">
+              <a-form-item>
                   <a-select
                       v-model:value="searchFrom.searchValue"
                       :size="size"
