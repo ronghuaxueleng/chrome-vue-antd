@@ -15,6 +15,8 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   var currentTab = request.tabs[0];
   if (request.action === "injectCookie") {
+    // 删除所有cookie
+    clearAllCookie(currentTab)
     // 注入cookie
     injectData(request.data, currentTab);
   } else if (request.action === "delCookie") {
@@ -78,24 +80,6 @@ async function getUsedCookie() {
   });
 }
 
-// 注入请求头的函数
-async function injectRequestHeaders(details) {
-  debugger;
-  const headers = details.requestHeaders;
-  // 获取已使用的 Cookie
-  const usedCookie = await getUsedCookie();
-  debugger;
-  // 如果已使用的 Cookie 中有 type 为 2 的项，则注入请求头
-  if (usedCookie?.cookiesArr) {
-    usedCookie.cookiesArr.forEach((item) => {
-      if (item.type === 2) {
-        headers.push({ name: item.name, value: item.value });
-      }
-    });
-  }
-  return { requestHeaders: headers };
-}
-
 const checkAndReload = (currentCount, totalCount, currentTab) => {
   // 检查是否所有操作完成，如果是，刷新当前标签页
   if (currentCount === totalCount) {
@@ -128,3 +112,28 @@ const injectData = (data, currentTab) => {
     }
   });
 };
+
+const clearAllCookie = (currentTab) => {
+  chrome.cookies.getAll({ url: currentTab.url }, (cookies) => {
+    if (chrome.runtime.lastError) {
+      console.error(chrome.runtime.lastError);
+    } else {
+      // 删除每个 cookie
+      let count = 0;
+      cookies.forEach((cookie) => {
+        chrome.cookies.remove(
+            { url: currentTab.url, name: cookie.name },
+            (removedCookie) => {
+              count++;
+              checkAndReload(count, cookies.length, currentTab);
+              if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError);
+              } else {
+                console.log("Cookie removed:", removedCookie);
+              }
+            }
+        );
+      });
+    }
+  });
+}
