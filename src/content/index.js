@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import ElementPlus from 'element-plus'
 import Content from '@/content/content.vue'
 
 // 创建id为CRX-container的div
@@ -9,6 +10,7 @@ document.body.appendChild(crxApp)
 
 // 创建Vue APP
 const app = createApp(Content)
+app.use(ElementPlus, { size: 'small', zIndex: 3000 })
 // 将Vue APP插入刚创建的div
 app.mount('#CRX-container')
 
