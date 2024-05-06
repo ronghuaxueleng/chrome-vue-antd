@@ -16,9 +16,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   var currentTab = request.tabs[0];
   if (request.action === "injectCookie") {
     // 删除所有cookie
-    clearAllCookie(currentTab)
-    // 注入cookie
-    injectData(request.data, currentTab);
+    clearAllCookie(request, currentTab)
   } else if (request.action === "delCookie") {
     // 获取指定 URL 下的所有 cookie
     chrome.cookies.getAll({ url: currentTab.url }, (cookies) => {
@@ -113,7 +111,7 @@ const injectData = (data, currentTab) => {
   });
 };
 
-const clearAllCookie = (currentTab) => {
+const clearAllCookie = (request, currentTab) => {
   chrome.cookies.getAll({ url: currentTab.url }, (cookies) => {
     if (chrome.runtime.lastError) {
       console.error(chrome.runtime.lastError);
@@ -125,6 +123,10 @@ const clearAllCookie = (currentTab) => {
             { url: currentTab.url, name: cookie.name },
             (removedCookie) => {
               count++;
+              if (count === cookies.length) {
+                // 注入cookie
+                injectData(request.data, currentTab);
+              }
               checkAndReload(count, cookies.length, currentTab);
               if (chrome.runtime.lastError) {
                 console.error(chrome.runtime.lastError);
