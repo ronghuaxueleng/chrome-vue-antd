@@ -6,7 +6,7 @@ const globalMethods = {
     if (chrome && chrome.storage && chrome.storage.sync) {
       chrome.storage.sync.get([name], (result) => {
         if (callback) {
-          callback(result[name]);
+          callback(JSON.parse(result[name]));
         }
       });
     } else {
@@ -16,8 +16,10 @@ const globalMethods = {
   setStorage: ref((name, data) => {
     // 设置存储
     if (chrome && chrome.storage && chrome.storage.sync) {
-      chrome.storage.sync.set({name: data}, () => {
-        console.log("Value is set:", {name: data});
+      const saveData = {}
+      saveData[name] = data
+      chrome.storage.sync.set(saveData, () => {
+        console.log("Value is set:", saveData);
       });
     } else {
       localStorage.setItem(name, data)
