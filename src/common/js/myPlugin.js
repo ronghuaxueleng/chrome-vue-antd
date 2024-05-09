@@ -6,21 +6,21 @@ const globalMethods = {
     if (chrome && chrome.storage && chrome.storage.sync) {
       chrome.storage.sync.get([name], (result) => {
         if (callback) {
-          callback(result[name]);
+          callback(JSON.parse(result[name]));
         }
       });
     } else {
-      console.error("Chrome对象不存在，无法读取cookie。");
+      callback(JSON.parse(localStorage.getItem(name)))
     }
   }),
-  setStorage: ref((data) => {
+  setStorage: ref((name, data) => {
     // 设置存储
     if (chrome && chrome.storage && chrome.storage.sync) {
-      chrome.storage.sync.set(data, () => {
-        console.log("Value is set:", data);
+      chrome.storage.sync.set({name: data}, () => {
+        console.log("Value is set:", {name: data});
       });
     } else {
-      console.error("Chrome对象不存在，无法设置cookie。");
+      localStorage.setItem(name, data)
     }
   }),
   delAllStorage: ref(() => {

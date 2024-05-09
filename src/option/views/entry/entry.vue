@@ -22,7 +22,7 @@ const addFrom = reactive({
 });
 const onFinish = async values => {
   // 存储数据
-  await methods.setStorage({ 'clientInfo': values });
+  await methods.setStorage('clientInfo', JSON.stringify(values));
 };
 onMounted(() => {
     methods.getStorage(('clientInfo'), (data) => {

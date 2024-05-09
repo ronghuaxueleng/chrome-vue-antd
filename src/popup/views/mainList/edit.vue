@@ -92,7 +92,7 @@ const onFinish = async values => {
             newdata = [values];
         }
         // 存储数据
-        await methods.setStorage({ 'cookie': newdata });
+        await methods.setStorage('cookie', JSON.stringify(newdata));
         console.log('newdata is', newdata)
         router.push('/mainList')
     });

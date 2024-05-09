@@ -145,7 +145,7 @@ const injectCookie = (data) => {
     }
     chrome.runtime.sendMessage({action: 'injectCookie', data: data.cookiesArr, tabs: tabs}, (response) => {
       console.log('收到来自 background.js 的响应:', response);
-      methods.setStorage({'usedCookie': data});
+      methods.setStorage('usedCookie', JSON.stringify(data));
       usedCookie.value = data
     });
   });
