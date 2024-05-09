@@ -6,7 +6,7 @@ const globalMethods = {
     if (chrome && chrome.storage && chrome.storage.sync) {
       chrome.storage.sync.get([name], (result) => {
         if (callback) {
-          callback(JSON.parse(result[name]));
+          callback(result[name]);
         }
       });
     } else {
