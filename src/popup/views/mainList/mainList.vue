@@ -39,6 +39,10 @@
                             <AimOutlined @click="injectCookie(record)"/>
                         </a-tooltip>
                         <a-divider type="vertical"/>
+                        <a-tooltip>
+                            <template #title>获取当前cookieId</template>
+                            <HighlightOutlined @click="getCookieId(record)"/>
+                        </a-tooltip>
                     </div>
                 </template>
             </template>
@@ -132,16 +136,18 @@ const syncData = () => {
 }
 
 const clearCookie = () => {
-    chrome.runtime.sendMessage({action: 'delCookie', tabs: tabs}, (response) => {
-        console.log('收到来自 background.js 的响应:', response);
-    });
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        chrome.runtime.sendMessage({action: 'delCookie', tabs: tabs}, (response) => {
+            console.log('收到来自 background.js 的响应:', response);
+        });
+    })
+}
+
+const getCookieId = (data) => {
+    usedCookie.value = data;
 }
 
 const injectCookie = (data) => {
-    if (data.status===1) {
-        usedCookie.value = data;
-        return;
-    }
     if (!data.cookiesArr) {
         console.log('cookie为空')
         return
