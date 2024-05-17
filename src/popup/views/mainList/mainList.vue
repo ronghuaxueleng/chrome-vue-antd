@@ -15,7 +15,10 @@
                     <a-button type="primary" html-type="submit">同步</a-button>
                 </a-form-item>
                 <a-form-item>
-                    <FormOutlined @click="updateCookie">更新</FormOutlined>
+                    <DeleteOutlined @click="clearCookie">清除cookie</DeleteOutlined>
+                    <a-divider type="vertical"/>
+                    <SyncOutlined @click="updateCookie">更新</SyncOutlined>
+                    <a-divider type="vertical"/>
                     <a-button type="link" :href="option.url" target="_blank">Link</a-button>
                 </a-form-item>
             </a-form>
@@ -24,17 +27,18 @@
                  style="height: 100%;margin-top: 8px;" bordered>
             <template #bodyCell="{ column, record, index }">
                 <template v-if="column.dataIndex === 'name'">
-                    <a-badge v-if="record.status===1" status="error" :text="record.name" />
-                    <a-badge v-else-if="record.name===usedCookie.name" status="processing" :text="record.name" />
-                    <a-badge v-else status="success" :text="record.name" />
+                    <a-badge v-if="record.status===1" status="error" :text="record.name"/>
+                    <a-badge v-else-if="record.name===usedCookie.name" status="processing" :text="record.name"/>
+                    <a-badge v-else status="success" :text="record.name"/>
                 </template>
                 <template v-else-if="column.dataIndex === 'Action'">
                     <div>
                         <a-divider type="vertical"/>
                         <a-tooltip>
                             <template #title>注入当前cookie</template>
-                            <RedoOutlined @click="injectCookie(record)"/>
+                            <AimOutlined @click="injectCookie(record)"/>
                         </a-tooltip>
+                        <a-divider type="vertical"/>
                     </div>
                 </template>
             </template>
@@ -43,7 +47,7 @@
 </template>
 <script setup>
 import {apiReqs} from '@/api'
-import {FormOutlined, RedoOutlined} from '@ant-design/icons-vue';
+import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import {ref, inject, onMounted, reactive, watch} from 'vue';
 
@@ -127,10 +131,20 @@ const syncData = () => {
         })
 }
 
+const clearCookie = () => {
+    chrome.runtime.sendMessage({action: 'delCookie', tabs: tabs}, (response) => {
+        console.log('收到来自 background.js 的响应:', response);
+    });
+}
+
 const injectCookie = (data) => {
-    // 注入cookie 发送消息到 background.js
+    if (data.status===1) {
+        usedCookie.value = data;
+        return;
+    }
     if (!data.cookiesArr) {
         console.log('cookie为空')
+        return
     }
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         if (!tabs) {
