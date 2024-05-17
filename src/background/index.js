@@ -47,21 +47,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       if (chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError);
       } else {
-        const cookieList = cookies.map((item) => {
-          return {
-            name: item.name,
-            value: item.value,
-          };
-        });
-        chrome.storage.sync.get(["cookie"], async (data) => {
-          const foundItem = data.cookie.find(
-            (item) => item.name === request.name
-          );
-          foundItem.cookiesArr = cookieList;
-          chrome.storage.sync.set(data, () => {
-            sendResponse({ message: "处理成功！" });
-          });
-        });
+        sendResponse(cookies);
       }
     });
   }

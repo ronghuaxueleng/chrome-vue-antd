@@ -26,12 +26,13 @@ export const API_FAILED = "网络连接异常，请稍后再试";
 // API请求汇总
 export const apiReqs = {
   getToken: (config) => {
-    config.method = "get";
     apiFetch(config);
   },
   // 获取数据
   getData: (config) => {
-    config.method = "get";
+    apiFetch(config);
+  },
+  updateData: (config) => {
     apiFetch(config);
   },
   // 委托background提交数据
@@ -71,7 +72,7 @@ export function apiRequest(config) {
   }
 
   // 如果没有设置config.method，则默认为post
-  config.method = config.method || "post";
+  config.method = config.method || "get";
 
   // 请求头设置
   let headers = {};
@@ -96,7 +97,7 @@ export function apiRequest(config) {
     headers,
   };
 
-  if (config.method === "post") {
+  if (config.method === "post" || config.method === "put") {
     axiosConfig.body = data;
   }
 
