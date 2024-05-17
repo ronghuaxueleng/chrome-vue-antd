@@ -186,7 +186,7 @@ const updateCookie = () => {
                                                 data: [usedCookie.value.id],
                                                 // 如果上传文件，则设置formData为true，这里暂时不用。
                                                 success: (res) => {
-
+                                                    syncData()
                                                 },
                                                 fail: (res) => {
                                                     console.log('接口获取数据失败', res)
