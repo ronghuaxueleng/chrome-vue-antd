@@ -24,14 +24,9 @@
                  style="height: 100%;margin-top: 8px;" bordered>
             <template #bodyCell="{ column, record, index }">
                 <template v-if="column.dataIndex === 'name'">
-                    {{ record.name }}
-                </template>
-                <template v-else-if="column.dataIndex === 'cookies' && record.cookiesArr">
-                    <div class="cookieClass">
-                        <div color="geekblue" v-for="(item, index) in record.cookiesArr" :key="index">
-                            <a-tag color="#2db7f5"> {{ JSON.stringify(item) }}</a-tag>
-                        </div>
-                    </div>
+                    <a-badge v-if="record.status===1" status="error" :text="record.name" />
+                    <a-badge v-else-if="record.name===usedCookie.name" status="processing" :text="record.name" />
+                    <a-badge v-else status="success" :text="record.name" />
                 </template>
                 <template v-else-if="column.dataIndex === 'Action'">
                     <div>
@@ -104,6 +99,7 @@ const syncData = () => {
                                         .map((item) => ({
                                             id: item.id,
                                             name: item.remarks,
+                                            status: item.status,
                                             cookiesArr: JSON.parse(item.value),
                                         }));
 
