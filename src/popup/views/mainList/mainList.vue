@@ -73,15 +73,26 @@ const searchFrom = reactive({
     searchValue: 'liblib_cookie',
 });
 const size = ref('default');
-const options = ref([]);
+const options = ref([
+    {
+        "siteName": "哩布哩布",
+        "cookieName": "liblib_cookie",
+        "url": "https://www.liblib.art/message"
+    },
+    {
+        "siteName": "Shakker AI",
+        "cookieName": "shakker_cookie",
+        "url": "https://www.shakker.ai/message"
+    }
+]);
 const optionMap = ref({});
 const option = ref({});
 
 const syncData = () => {
-    options.value = []
     const url = "https://gist.githubusercontent.com/ronghuaxueleng/4423ea3d530b9e758c7dd47a456e9c3f/raw/3463a589618728812fb220d1085406914b74c821/cookie_names.json"
     fetch(url).then((res) => res.json())
         .then((result) => {
+            options.value = []
             for (let x of result) {
                 options.value.push({
                     value: x.cookieName, label: x.siteName
