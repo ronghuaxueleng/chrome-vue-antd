@@ -202,7 +202,7 @@ const updateCookie = () => {
                                             "authorization": tokenRes['data']['token_type'] + ' ' + tokenRes['data']['token']
                                         },
                                         data: {
-                                            "name": "liblib_cookie",
+                                            "name": option.value.cookieName,
                                             "id": usedCookie.value.id,
                                             "value": JSON.stringify(cookies),
                                         },
