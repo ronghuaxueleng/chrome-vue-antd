@@ -84,6 +84,8 @@ const injectData = (data, currentTab) => {
       // 注入 cookie
       delete item['hostOnly']
       delete item['session']
+      delete item['expirationDate']
+      delete item['id']
       item['url'] = currentTab.url
       chrome.cookies.set(item, (result) => {
         console.log("Cookie is set:", result);
