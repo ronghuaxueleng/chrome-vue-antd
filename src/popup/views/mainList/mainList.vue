@@ -43,6 +43,7 @@
                             <template #title>获取当前cookieId</template>
                             <HighlightOutlined @click="getCookieId(record)"/>
                         </a-tooltip>
+                        <a-divider type="vertical"/>
                         <a-tooltip>
                             <template #title>获取微信二维码</template>
                             <WechatOutlined @click="copywxurl(record)"/>
