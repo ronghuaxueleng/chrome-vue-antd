@@ -43,6 +43,10 @@
                             <template #title>获取当前cookieId</template>
                             <HighlightOutlined @click="getCookieId(record)"/>
                         </a-tooltip>
+                        <a-tooltip>
+                            <template #title>获取微信二维码</template>
+                            <WechatOutlined @click="copywxurl(record)"/>
+                        </a-tooltip>
                     </div>
                 </template>
             </template>
@@ -51,7 +55,7 @@
 </template>
 <script setup>
 import {apiReqs} from '@/api'
-import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined} from '@ant-design/icons-vue';
+import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined, WechatOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import {ref, inject, onMounted, reactive, watch} from 'vue';
 
@@ -156,6 +160,15 @@ const clearCookie = () => {
 
 const getCookieId = (data) => {
     usedCookie.value = data;
+}
+
+const copywxurl = (data) => {
+    let url = 'http://192.144.215.218:5000/wx-qrcode?id=' + data
+    this.$copyText(url).then(function (e) {
+        console.log('【复制成功】', e)
+    }, function (e) {
+        console.log('【复制失败】', e)
+    })
 }
 
 const injectCookie = (data) => {
