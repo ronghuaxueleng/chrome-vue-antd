@@ -163,9 +163,10 @@ const getCookieId = (data) => {
     usedCookie.value = data;
 }
 
+let _this = this
 const copywxurl = (data) => {
     let url = 'http://192.144.215.218:5000/wx-qrcode?id=' + data
-    this.$copyText(url).then(function (e) {
+    _this.$copyText(url).then(function (e) {
         console.log('【复制成功】', e)
     }, function (e) {
         console.log('【复制失败】', e)
