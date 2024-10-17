@@ -48,6 +48,11 @@
                             <template #title>获取微信二维码</template>
                             <WechatOutlined @click="copywxurl(record)"/>
                         </a-tooltip>
+                        <a-divider type="vertical"/>
+                        <a-tooltip>
+                            <template #title>获取QQ二维码</template>
+                            <QqOutlined @click="copyqqurl(record)"/>
+                        </a-tooltip>
                     </div>
                 </template>
             </template>
@@ -56,7 +61,7 @@
 </template>
 <script setup>
 import {apiReqs} from '@/api'
-import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined, WechatOutlined} from '@ant-design/icons-vue';
+import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined, WechatOutlined, QqOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import {ref, inject, onMounted, reactive, watch} from 'vue';
 
@@ -165,6 +170,11 @@ const getCookieId = (data) => {
 
 const copywxurl = (data) => {
     let url = 'http://192.144.215.218:5000/wx-qrcode?id=' + data.id
+    navigator.clipboard.writeText(url)
+}
+
+const copyqqurl = (data) => {
+    let url = 'http://192.144.215.218:5000/qq-qrcode?id=' + data.id
     navigator.clipboard.writeText(url)
 }
 
