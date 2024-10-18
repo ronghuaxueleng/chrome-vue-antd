@@ -20,6 +20,10 @@
                     <SyncOutlined @click="updateCookie">更新</SyncOutlined>
                     <a-divider type="vertical"/>
                     <a-button type="link" :href="option.url" target="_blank">Link</a-button>
+                    <a-divider type="vertical"/>
+                    <WechatOutlined @click="copywxurl()">微信登录</WechatOutlined>
+                    <a-divider type="vertical"/>
+                    <QqOutlined @click="copyqqurl()">QQ登录</QqOutlined>
                 </a-form-item>
             </a-form>
         </a-space-compact>
@@ -169,12 +173,18 @@ const getCookieId = (data) => {
 }
 
 const copywxurl = (data) => {
-    let url = 'http://192.144.215.218:5000/wx-qrcode?id=' + data.id
+    let url = 'http://192.144.215.218:5000/wx-qrcode?t=' + new Date().getTime()
+    if (data !== undefined) {
+        url += '&id=' + data.id
+    }
     navigator.clipboard.writeText(url)
 }
 
 const copyqqurl = (data) => {
-    let url = 'http://192.144.215.218:5000/qq-qrcode?id=' + data.id
+    let url = 'http://192.144.215.218:5000/qq-qrcode?t=' + new Date().getTime()
+    if (data !== undefined) {
+        url += '&id=' + data.id
+    }
     navigator.clipboard.writeText(url)
 }
 
