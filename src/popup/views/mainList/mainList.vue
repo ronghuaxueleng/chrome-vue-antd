@@ -57,6 +57,11 @@
                             <template #title>获取QQ二维码</template>
                             <QqOutlined @click="copyqqurl(record)"/>
                         </a-tooltip>
+                        <a-divider type="vertical"/>
+                        <a-tooltip>
+                            <template #title>邮箱登录</template>
+                            <ForwardOutlined @click="emaillogin(record)"/>
+                        </a-tooltip>
                     </div>
                 </template>
             </template>
@@ -65,12 +70,12 @@
 </template>
 <script setup>
 import {apiReqs} from '@/api'
-import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined, WechatOutlined, QqOutlined} from '@ant-design/icons-vue';
+import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined, WechatOutlined, QqOutlined, ForwardOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import {ref, inject, onMounted, reactive, watch} from 'vue';
 
-// const domain = 'http://192.144.215.218:5000'
-const domain = 'http://qrcode.ronghuaxueleng.site'
+const domain = 'http://192.144.215.218:5000'
+// const domain = 'http://qrcode.ronghuaxueleng.site'
 const methods = inject('globalMethods');
 const data = ref([]);
 const usedCookie = ref({});
@@ -188,6 +193,13 @@ const copyqqurl = (data) => {
         url += '&id=' + data.id
     }
     navigator.clipboard.writeText(url)
+}
+
+const emaillogin = (data) => {
+    let url = domain + '/email-login?t=' + new Date().getTime()
+    url += '&id=' + data.id + '&email=' + data.name
+    navigator.clipboard.writeText(url)
+    window.open(url, '_blank')
 }
 
 const injectCookie = (data) => {
