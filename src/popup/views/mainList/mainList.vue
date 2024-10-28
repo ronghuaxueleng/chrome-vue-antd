@@ -74,8 +74,8 @@ import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined, WechatOutl
 import {message} from 'ant-design-vue';
 import {ref, inject, onMounted, reactive, watch} from 'vue';
 
-const domain = 'http://192.144.215.218:5000'
-// const domain = 'http://qrcode.ronghuaxueleng.site'
+// const domain = 'http://192.144.215.218:5000'
+const domain = 'http://qrcode.ronghuaxueleng.site'
 const methods = inject('globalMethods');
 const data = ref([]);
 const usedCookie = ref({});
