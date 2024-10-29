@@ -96,75 +96,76 @@ const searchFrom = reactive({
 const size = ref('default');
 const options = ref([
     {
+        "value": "liblib_cookie",
+        "label": "哩布哩布"
+    },
+    {
+        "value": "shakker_cookie",
+        "label": "Shakker AI"
+    }
+]);
+const optionMap = ref({
+    "liblib_cookie": {
         "siteName": "哩布哩布",
         "cookieName": "liblib_cookie",
         "url": "https://www.liblib.art/message"
     },
-    {
+    "shakker_cookie": {
         "siteName": "Shakker AI",
         "cookieName": "shakker_cookie",
         "url": "https://www.shakker.ai/message"
     }
-]);
-const optionMap = ref({});
-const option = ref({});
+});
+const option = ref({
+    "siteName": "哩布哩布",
+    "cookieName": "liblib_cookie",
+    "url": "https://www.liblib.art/message"
+});
 
 const syncData = () => {
-    const url = "https://gist.githubusercontent.com/ronghuaxueleng/4423ea3d530b9e758c7dd47a456e9c3f/raw/3463a589618728812fb220d1085406914b74c821/cookie_names.json"
-    fetch(url).then((res) => res.json())
-        .then((result) => {
-            options.value = []
-            for (let x of result) {
-                options.value.push({
-                    value: x.cookieName, label: x.siteName
-                })
-                optionMap.value[x.cookieName] = x
-            }
-            option.value = optionMap.value[searchFrom.searchValue]
-            methods.getStorage(('clientInfo'), (clientdata) => {
-                apiReqs.getToken({
-                    url: "open/auth/token?client_id=" + clientdata.client_id + "&client_secret=" + clientdata.client_secret,
+    methods.getStorage(('clientInfo'), (clientdata) => {
+        apiReqs.getToken({
+            url: "open/auth/token?client_id=" + clientdata.client_id + "&client_secret=" + clientdata.client_secret,
+            success: (res) => {
+                // 同步数据
+                apiReqs.getData({
+                    url: "open/envs?searchValue=" + searchFrom.searchValue,
+                    headers: {
+                        "authorization": res['data']['token_type'] + ' ' + res['data']['token']
+                    },
+                    // 如果上传文件，则设置formData为true，这里暂时不用。
                     success: (res) => {
-                        // 同步数据
-                        apiReqs.getData({
-                            url: "open/envs?searchValue=" + searchFrom.searchValue,
-                            headers: {
-                                "authorization": res['data']['token_type'] + ' ' + res['data']['token']
-                            },
-                            // 如果上传文件，则设置formData为true，这里暂时不用。
-                            success: (res) => {
-                                let datas = res.data
-                                if (Array.isArray(datas) && datas.length > 0) {
-                                    const dataList = datas
-                                        .map((item) => ({
-                                            id: item.id,
-                                            name: item.remarks,
-                                            status: item.status,
-                                            cookiesArr: JSON.parse(item.value),
-                                        }));
+                        let datas = res.data
+                        if (Array.isArray(datas) && datas.length > 0) {
+                            const dataList = datas
+                                .map((item) => ({
+                                    id: item.id,
+                                    name: item.remarks,
+                                    status: item.status,
+                                    cookiesArr: JSON.parse(item.value),
+                                }));
 
-                                    if (dataList.length === 0) {
-                                        message.success('接口暂无有效数据');
-                                        return;
-                                    }
-                                    data.value = dataList
-                                } else {
-                                    message.success('接口暂无数据');
-                                }
-                            },
-                            fail: (res) => {
-                                console.log('接口获取数据失败', res)
-                                message.error('接口获取数据失败');
-                            },
-                        })
+                            if (dataList.length === 0) {
+                                message.success('接口暂无有效数据');
+                                return;
+                            }
+                            data.value = dataList
+                        } else {
+                            message.success('接口暂无数据');
+                        }
                     },
                     fail: (res) => {
                         console.log('接口获取数据失败', res)
                         message.error('接口获取数据失败');
                     },
                 })
-            });
+            },
+            fail: (res) => {
+                console.log('接口获取数据失败', res)
+                message.error('接口获取数据失败');
+            },
         })
+    });
 }
 
 const clearCookie = () => {
