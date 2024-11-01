@@ -6,7 +6,7 @@
                     <a-select
                         v-model:value="searchFrom.searchValue"
                         :size="size"
-                        style="width: 200px"
+                        style="width: 100px"
                         :options="options"
                         @change="handleChange"
                     ></a-select>
