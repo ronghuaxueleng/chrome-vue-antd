@@ -47,21 +47,27 @@
                             <template #title>获取当前cookieId</template>
                             <HighlightOutlined @click="getCookieId(record)"/>
                         </a-tooltip>
-                        <a-divider type="vertical"/>
-                        <a-tooltip>
-                            <template #title>获取微信二维码</template>
-                            <WechatOutlined @click="copywxurl(record)"/>
-                        </a-tooltip>
-                        <a-divider type="vertical"/>
-                        <a-tooltip>
-                            <template #title>获取QQ二维码</template>
-                            <QqOutlined @click="copyqqurl(record)"/>
-                        </a-tooltip>
-                        <a-divider type="vertical"/>
-                        <a-tooltip>
-                            <template #title>邮箱登录</template>
-                            <ForwardOutlined @click="emaillogin(record)"/>
-                        </a-tooltip>
+                        <span v-if="record.sourcetype==='微信'">
+                            <a-divider type="vertical"/>
+                            <a-tooltip>
+                                <template #title>获取微信二维码</template>
+                                <WechatOutlined @click="copywxurl(record)"/>
+                            </a-tooltip>
+                        </span>
+                        <span v-if="record.sourcetype==='qq'">
+                            <a-divider type="vertical"/>
+                            <a-tooltip>
+                                <template #title>获取QQ二维码</template>
+                                <QqOutlined @click="copyqqurl(record)"/>
+                            </a-tooltip>
+                        </span>
+                        <span v-if="record.sourcetype==='邮箱'">
+                            <a-divider type="vertical"/>
+                            <a-tooltip>
+                                <template #title>邮箱登录</template>
+                                <ForwardOutlined @click="emaillogin(record)"/>
+                            </a-tooltip>
+                        </span>
                     </div>
                 </template>
             </template>
@@ -136,13 +142,17 @@ const syncData = () => {
                     // 如果上传文件，则设置formData为true，这里暂时不用。
                     success: (res) => {
                         let datas = res.data
+                        console.log(datas)
                         if (Array.isArray(datas) && datas.length > 0) {
                             const dataList = datas
                                 .map((item) => ({
                                     id: item.id,
-                                    name: item.remarks,
                                     status: item.status,
+                                    remarks: item.remarks,
+                                    username: item.username,
+                                    sourcetype: item.sourcetype,
                                     cookiesArr: JSON.parse(item.value),
+                                    name: item.remarks + (!!item.username ? ('-' + item.username) : ""),
                                 }));
 
                             if (dataList.length === 0) {
@@ -198,7 +208,7 @@ const copyqqurl = (data) => {
 
 const emaillogin = (data) => {
     let url = domain + '/email-login?t=' + new Date().getTime()
-    url += '&id=' + data.id + '&email=' + data.name
+    url += '&id=' + data.id + '&email=' + data.remarks
     navigator.clipboard.writeText(url)
     window.open(url, '_blank')
 }
