@@ -31,9 +31,9 @@
                  style="height: 100%;margin-top: 8px;" bordered>
             <template #bodyCell="{ column, record, index }">
                 <template v-if="column.dataIndex === 'name'">
-                    <a-badge v-if="record.status===1" status="error" :text="record.name"/>
-                    <a-badge v-else-if="record.name===usedCookie.name" status="processing" :text="record.name"/>
-                    <a-badge v-else status="success" :text="record.name"/>
+                    <a-badge v-if="record.status===1" status="error" :text="record.name" @click="copyphone(record)"/>
+                    <a-badge v-else-if="record.name===usedCookie.name" status="processing" :text="record.name" @click="copyphone(record)"/>
+                    <a-badge v-else status="success" :text="record.name" @click="copyphone(record)"/>
                 </template>
                 <template v-else-if="column.dataIndex === 'Action'">
                     <div>
@@ -188,6 +188,12 @@ const clearCookie = () => {
 
 const getCookieId = (data) => {
     usedCookie.value = data;
+}
+
+const copyphone = (data) => {
+    if (data.sourcetype === '手机号') {
+        navigator.clipboard.writeText(data.remarks)
+    }
 }
 
 const copywxurl = (data) => {
