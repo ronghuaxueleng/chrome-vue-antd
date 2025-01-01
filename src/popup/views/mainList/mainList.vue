@@ -191,7 +191,6 @@ const getCookieId = (data) => {
 }
 
 const copyphone = (data) => {
-    console.log(data)
     if (data.sourcetype === '手机号' || data.sourcetype === '邮箱') {
         navigator.clipboard.writeText(data.remarks)
     }
