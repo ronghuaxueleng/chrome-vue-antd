@@ -305,10 +305,28 @@ const updateCookie = () => {
 }
 
 onMounted(() => {
-    syncData()
+    // 从存储中获取上次选中的网站
+    if (chrome && chrome.storage && chrome.storage.sync) {
+        chrome.storage.sync.get(['lastSelectedSite'], (result) => {
+            if (result.lastSelectedSite) {
+                searchFrom.searchValue = result.lastSelectedSite;
+                option.value = optionMap.value[result.lastSelectedSite];
+            }
+            syncData()
+        });
+    } else {
+        const storedSite = localStorage.getItem('lastSelectedSite');
+        if (storedSite) {
+            searchFrom.searchValue = storedSite;
+            option.value = optionMap.value[storedSite];
+        }
+        syncData()
+    }
 })
 const handleChange = (value) => {
     option.value = optionMap.value[value]
+    // 保存选中的网站到存储中
+    methods.setStorage('lastSelectedSite', value);
     syncData()
 };
 </script>
