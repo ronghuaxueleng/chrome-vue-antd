@@ -43,6 +43,7 @@ const submit = () => {
         v-if="isVisible"
         title="CRX对话框"
         width="600"
+        :close-on-click-modal="false"
     >
         <div class="main-content-con">
             <div class="item-con">
