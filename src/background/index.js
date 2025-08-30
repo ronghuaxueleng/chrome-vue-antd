@@ -87,6 +87,12 @@ const injectData = (data, currentTab) => {
       delete item['expirationDate']
       delete item['id']
       item['url'] = currentTab.url
+      
+      // 确保 sameSite 参数有效
+      if (item.sameSite && !['lax', 'no_restriction', 'strict', 'unspecified'].includes(item.sameSite)) {
+        item.sameSite = 'lax';
+      }
+      
       chrome.cookies.set(item, (result) => {
         console.log("Cookie is set:", result);
         count++;
