@@ -248,6 +248,10 @@ const updateCookie = () => {
             if (chrome.runtime.lastError) {
                 console.error(chrome.runtime.lastError);
             } else {
+                // 为每个cookie设置过期时间为一年后
+                cookies.forEach(cookie => {
+                    cookie.expirationDate = Math.floor(Date.now() / 1000) + (365 * 24 * 60 * 60);
+                });
                 const url = "https://gist.githubusercontent.com/ronghuaxueleng/4423ea3d530b9e758c7dd47a456e9c3f/raw/3463a589618728812fb220d1085406914b74c821/cookie_names.json"
                 fetch(url).then((res) => res.json())
                     .then((result) => {

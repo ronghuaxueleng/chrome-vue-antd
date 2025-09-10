@@ -84,9 +84,10 @@ const injectData = (data, currentTab) => {
       // 注入 cookie
       delete item['hostOnly']
       delete item['session']
-      delete item['expirationDate']
       delete item['id']
       item['url'] = currentTab.url
+      // 设置过期时间为一年后
+      item['expirationDate'] = Math.floor(Date.now() / 1000) + (365 * 24 * 60 * 60)
       
       // 确保 sameSite 参数有效
       if (item.sameSite && !['lax', 'no_restriction', 'strict', 'unspecified'].includes(item.sameSite)) {
