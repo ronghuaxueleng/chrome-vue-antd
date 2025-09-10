@@ -24,6 +24,8 @@
                     <WechatOutlined @click="copywxurl()">微信登录</WechatOutlined>
                     <a-divider type="vertical"/>
                     <QqOutlined @click="copyqqurl()">QQ登录</QqOutlined>
+                    <a-divider type="vertical"/>
+                    <PhoneOutlined @click="copyphoneurl()">手机号登录</PhoneOutlined>
                 </a-form-item>
             </a-form>
         </a-space-compact>
@@ -68,6 +70,13 @@
                                 <ForwardOutlined @click="emaillogin(record)"/>
                             </a-tooltip>
                         </span>
+                        <span v-if="record.sourcetype==='手机号'">
+                            <a-divider type="vertical"/>
+                            <a-tooltip>
+                                <template #title>手机号登录</template>
+                                <PhoneOutlined @click="copyphoneurl(record)"/>
+                            </a-tooltip>
+                        </span>
                     </div>
                 </template>
             </template>
@@ -76,7 +85,7 @@
 </template>
 <script setup>
 import {apiReqs} from '@/api'
-import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined, WechatOutlined, QqOutlined, ForwardOutlined} from '@ant-design/icons-vue';
+import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined, WechatOutlined, QqOutlined, ForwardOutlined, PhoneOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import {ref, inject, onMounted, reactive, watch} from 'vue';
 
@@ -208,6 +217,14 @@ const copyqqurl = (data) => {
     let url = domain + '/qq-qrcode?t=' + new Date().getTime()
     if (data !== undefined) {
         url += '&id=' + data.id
+    }
+    navigator.clipboard.writeText(url)
+}
+
+const copyphoneurl = (data) => {
+    let url = domain + '/phone-login?t=' + new Date().getTime()
+    if (data !== undefined) {
+        url += '&id=' + data.id + '&phone=' + data.remarks
     }
     navigator.clipboard.writeText(url)
 }
