@@ -2,10 +2,10 @@
 // import '@/mock'
 /*global chrome*/
 // 请求服务器地址（开发环境模拟请求地址）
-let API_DOMAIN = "http://49.234.39.232:5680/";
+let API_DOMAIN = "http://www.ronghuaxueleng.top:5680/";
 // 请求服务器地址（正式build环境真实请求地址）
 if (import.meta.env.MODE === "production") {
-  API_DOMAIN = "http://49.234.39.232:5680/";
+  API_DOMAIN = "http://www.ronghuaxueleng.top:5680/";
 }
 
 
