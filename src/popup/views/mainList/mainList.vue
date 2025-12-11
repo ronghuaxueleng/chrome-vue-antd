@@ -89,7 +89,7 @@ import {SyncOutlined, DeleteOutlined, AimOutlined, HighlightOutlined, WechatOutl
 import {message} from 'ant-design-vue';
 import {ref, inject, onMounted, reactive, watch} from 'vue';
 
-const domain = 'https://qrcode.ronghuaxueleng.top'
+const domain = 'https://m.ronghuaxueleng.top'
 const methods = inject('globalMethods');
 const data = ref([]);
 const usedCookie = ref({});
@@ -205,7 +205,7 @@ const copyphone = (data) => {
 }
 
 const copywxurl = (data) => {
-    let url = domain + '/wx-qrcode?t=' + new Date().getTime()
+    let url = domain + '/bindwx?t=' + new Date().getTime()
     if (data !== undefined) {
         url += '&id=' + data.id
     }
@@ -213,7 +213,7 @@ const copywxurl = (data) => {
 }
 
 const copyqqurl = (data) => {
-    let url = domain + '/qq-qrcode?t=' + new Date().getTime()
+    let url = domain + '/bindqq?t=' + new Date().getTime()
     if (data !== undefined) {
         url += '&id=' + data.id
     }
